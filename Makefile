@@ -9,6 +9,7 @@ help:
 	@echo "dev-web  - Run the Next.js dev server."
 	@echo "fresh    - Build and Run the sync engine."
 	@echo "clean    - Remove build artifacts."
+	@echo "bump 	- Increment the fix version number."
 	@echo "push     - Helper to push to GitHub."
 
 # Install dependencies
@@ -23,6 +24,10 @@ build:
 
 fresh:
 	pnpm --filter "@freshn/cli" fresh
+
+# Increment the fix version number
+bump:
+	node scripts/bump-version.js
 
 # Run the Next.js dev server
 dev-web:
