@@ -15,6 +15,15 @@ help:
 install:
 	pnpm install
 
+# Build types first, then the apps
+build:
+	pnpm --filter "@freshn/types" build
+	pnpm --filter "@freshn/cli" build
+	pnpm --filter web build
+
+fresh:
+	pnpm --filter "@freshn/cli" fresh
+
 # Run the Next.js dev server
 dev-web:
 	pnpm --filter web dev
@@ -22,10 +31,6 @@ dev-web:
 # Run the CLI in dev mode (using tsx)
 dev-cli:
 	pnpm --filter cli fresh
-
-# Build everything for production
-build:
-	pnpm --filter "@freshn/*" build
 
 # Remove build artifacts
 clean:
