@@ -1,6 +1,6 @@
 {
   "name": "freshn-io-root",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "SEE LICENSE IN LICENSE",
   "description": "Private workstation sync engine",
   "private": true,
@@ -10,7 +10,7 @@
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
-    "node": ">=20.0.0",
+    "node": "20.x",
     "pnpm": ">=9.0.0"
   },
   "scripts": {

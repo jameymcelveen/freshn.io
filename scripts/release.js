@@ -30,6 +30,8 @@ function verifyEnvironment() {
 }
 
 try {
+    console.log('📡 Syncing with remote...');
+    run('git pull origin develop --rebase');
     verifyEnvironment();
 
     // ... rest of your release logic (branch check, bump, build, tag, push, pr)

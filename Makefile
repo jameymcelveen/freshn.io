@@ -16,7 +16,7 @@ help:
 	@echo "push     - Quick commit and push to develop."
 
 install:
-	pnpm install
+	pngh prpm install
 
 # Build order is critical: Types -> Apps
 build:
