@@ -7,19 +7,6 @@ import chalk from 'chalk';
 import semver from 'semver';
 import { FreshnConfig, WorkstationState } from '@freshn/types';
 
-interface FreshnConfig {
-    meta: {
-        name: string;
-        owner: string;
-        node_version?: string;
-    };
-    brew?: {
-        packages?: { items: string[] };
-        casks?: { items: string[] };
-    };
-    dotfiles?: Record<string, string>;
-}
-
 const isDryRun = process.argv.includes('--dry-run');
 
 // async function reportToDashboard(state: WorkstationState) {
