@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@freshn/types": ["../../packages/types/index.ts"]
     }
   },
   "include": [

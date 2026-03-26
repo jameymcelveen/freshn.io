@@ -1,16 +1,25 @@
 {
-  "name": "freshn",
-  "version": "0.1.0",
+  "name": "freshn-io-root",
+  "version": "0.1.4",
+  "license": "SEE LICENSE IN LICENSE",
   "description": "Private workstation sync engine",
   "private": true,
   "type": "module",
   "bin": {
     "freshn": "./bin/freshn.js"
   },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsc",
-    "fresh": "tsx src/index.ts"
+    "fresh": "tsx src/index.ts",
+    "build": "pnpm --filter @freshn/types build && pnpm --filter @freshn/cli build && pnpm --filter web build",
+    "build:types": "pnpm --filter @freshn/types build",
+    "build:web": "pnpm --filter web build",
+    "build:cli": "pnpm --filter @freshn/cli build"
   },
   "dependencies": {
     "chalk": "^5.3.0",
