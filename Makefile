@@ -1,7 +1,7 @@
 # Extract version from package.json for use in tagging
 VERSION := $(shell node -p "require('./package.json').version")
 
-.PHONY: install dev-cli dev-web build fresh clean tag bump release push help
+.PHONY: install dev-cli dev-web build fresh clean tag bump release push verify help
 
 help:
 	@echo "🌿 Freshn.io - Idempotent Workstation Manager."
@@ -20,15 +20,21 @@ install:
 
 # Build order is critical: Types -> Apps
 build:
+	@echo "🏗️ Building Types..."
 	pnpm --filter "@freshn/types" build
+	@echo "🏗️ Building CLI..."
 	pnpm --filter "@freshn/cli" build
+	@echo "🏗️ Building Web..."
 	pnpm --filter web build
 
 fresh:
 	pnpm --filter "@freshn/cli" fresh
 
 bump:
-	node scripts/bump-version.js
+	node scripts/bump.js
+
+verify:
+	node scripts/release.js
 
 # This command ensures you don't forget to build before tagging
 release: bump
