@@ -1,0 +1,13 @@
+[meta]
+name = "Primary Workstation"
+owner = "jameymcelveen"
+last_sync = "Wed Mar 25 20:11:20 EDT 2026"
+
+[brew.packages]
+items = ["gh", "jq", "tree", "node"]
+
+[brew.casks]
+items = ["visual-studio-code", "iterm2"]
+
+[dotfiles]
+".zshrc" = "configs/zshrc"

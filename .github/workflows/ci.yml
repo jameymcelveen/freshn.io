@@ -1,0 +1,34 @@
+name: Freshn CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest # Using macOS-latest to test 'brew' commands if needed
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build TypeScript
+        run: pnpm build
+
+      - name: Validate Config
+        run: pnpm fresh -- --dry-run # We should add a --dry-run flag next!

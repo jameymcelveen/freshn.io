@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+*.log
+.env
+dist/
+pnpm-lock.yaml
+# Firebase/Vercel keys (if added later)
+.firebase/
+.vercel/
+.idea/
+.vscode/
+.vercel
+.env*.local

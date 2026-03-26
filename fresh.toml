@@ -1,0 +1,10 @@
+[meta]
+name = "Primary Workstation"
+owner = "jameymcelveen"
+node_version = ">=20.0.0"
+
+[brew.packages]
+items = ["gh", "jq", "tree", "node", "pnpm"]
+
+[dotfiles]
+".zshrc" = "configs/zshrc"
