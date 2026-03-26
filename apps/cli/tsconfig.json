@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@freshn/types": ["../../packages/types/index.ts"]
+    }
   },
   "include": ["src/**/*"],
   "references": [{ "path": "../../packages/types" }]
