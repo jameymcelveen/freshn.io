@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshn.io | Workstation Sync</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(90deg, #4ade80, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 selection:bg-emerald-500/30">
+
+<div class="relative overflow-hidden pt-16 pb-32 space-y-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center space-y-8">
+            <div class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium leading-6 text-emerald-400 ring-1 ring-inset ring-emerald-500/20 bg-emerald-500/5">
+                Now in Private Alpha
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-white">
+                Stay <span class="gradient-text">Fresh</span>. <br>Every Single Time.
+            </h1>
+            <p class="text-lg leading-8 text-slate-400 max-w-2xl mx-auto">
+                A declarative, idempotent workstation manager built with TypeScript and Node.js.
+                Set up a brand new machine in minutes, not hours.
+            </p>
+
+            <div class="max-w-xl mx-auto mt-10">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                    <div class="relative flex items-center bg-slate-900 rounded-lg p-1 ring-1 ring-white/10">
+                        <code class="flex-1 text-left px-4 py-3 font-mono text-sm text-emerald-400 overflow-x-auto whitespace-nowrap" id="installCommand">
+                            curl -sL https://freshn.io/install.sh | bash
+                        </code>
+                        <button onclick="copyToClipboard()" class="p-3 text-slate-400 hover:text-white transition-colors" title="Copy to clipboard">
+                            <i id="copyIcon" class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="mt-4 text-xs text-slate-500">Requires macOS or Linux with Homebrew.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-colors">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-4 text-emerald-400">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <h3 class="font-semibold text-white">TOML Driven</h3>
+                <p class="text-sm text-slate-400 mt-2">Configuration as code. Easy to read, easy to version control in Git.</p>
+            </div>
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-colors">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-4 text-emerald-400">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </div>
+                <h3 class="font-semibold text-white">Idempotent</h3>
+                <p class="text-sm text-slate-400 mt-2">Run it a thousand times. It only changes what is out of sync.</p>
+            </div>
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-colors">
+                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-4 text-emerald-400">
+                    <i class="fa-solid fa-link"></i>
+                </div>
+                <h3 class="font-semibold text-white">Safe Symlinks</h3>
+                <p class="text-sm text-slate-400 mt-2">Intelligently links your dotfiles without overwriting local changes.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="border-t border-white/5 py-12 text-center text-sm text-slate-500">
+    <p>&copy; 2026 Freshn.io. All rights reserved.</p>
+    <div class="mt-4 space-x-6">
+        <a href="https://github.com/jameymcelveen/freshn.io" class="hover:text-emerald-400 transition-colors">GitHub</a>
+        <a href="#" class="hover:text-emerald-400 transition-colors">Documentation</a>
+    </div>
+</footer>
+
+<script>
+    function copyToClipboard() {
+        const text = document.getElementById('installCommand').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = document.getElementById('copyIcon');
+            icon.classList.remove('fa-copy');
+            icon.classList.add('fa-check', 'text-emerald-500');
+
+            setTimeout(() => {
+                icon.classList.remove('fa-check', 'text-emerald-500');
+                icon.classList.add('fa-copy');
+            }, 2000);
+        });
+    }
+</script>
+</body>
+</html>
