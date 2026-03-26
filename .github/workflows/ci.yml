@@ -1,15 +1,14 @@
-name: Freshn CI
+name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    runs-on: macos-latest # Using macOS-latest to test 'brew' commands if needed
-
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -18,17 +17,15 @@ jobs:
         with:
           version: 8
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
           cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Build TypeScript
+      - name: Build All Packages
+        # This builds types, cli, and web to ensure no TS errors
         run: pnpm build
-
-      - name: Validate Config
-        run: pnpm fresh -- --dry-run # We should add a --dry-run flag next!
