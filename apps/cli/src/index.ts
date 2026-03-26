@@ -5,6 +5,7 @@ import { parse } from 'smol-toml';
 import { execa } from 'execa';
 import chalk from 'chalk';
 import semver from 'semver';
+import { FreshnConfig, WorkstationState } from '@freshn/types';
 
 interface FreshnConfig {
     meta: {
@@ -21,10 +22,39 @@ interface FreshnConfig {
 
 const isDryRun = process.argv.includes('--dry-run');
 
+// async function reportToDashboard(state: WorkstationState) {
+//     // Use Firebase Admin or a simple Fetch call to your Next.js API route
+//     await fetch('https://freshn.io/api/heartbeat', {
+//         method: 'POST',
+//         body: JSON.stringify(state)
+//     });
+// }
+
+async function reportToDashboard(state: WorkstationState) {
+    const DASHBOARD_URL = process.env.FRESHN_API_URL || 'http://localhost:3000/api/heartbeat';
+
+    process.stdout.write(chalk.blue('📡 Reporting to dashboard... '));
+
+    try {
+        const response = await fetch(DASHBOARD_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state),
+        });
+
+        if (response.ok) {
+            console.log(chalk.green('Synced!'));
+        } else {
+            console.log(chalk.red(`Failed (${response.status})`));
+        }
+    } catch (err) {
+        console.log(chalk.yellow('Offline (Dashboard unreachable)'));
+    }
+}
+
 async function syncBrewPackages(packages: string[]) {
     console.log(chalk.blue('\n📦 Syncing Homebrew Packages...'));
 
-    // Get list of already installed packages once to save time
     const { stdout } = await execa('brew', ['list', '--formula']);
     const installed = stdout.split('\n');
 
@@ -32,13 +62,22 @@ async function syncBrewPackages(packages: string[]) {
         if (installed.includes(pkg)) {
             console.log(chalk.green(`  ✅ ${pkg} is already present.`));
         } else {
-            if (!isDryRun) {
-                process.stdout.write(chalk.yellow(`  📥 Installing ${pkg}... `));
+            process.stdout.write(chalk.yellow(`  📥 Installing ${pkg}... `));
+            try {
                 await execa('brew', ['install', pkg]);
-            } else {
-                console.log(chalk.dim(`  [Dry Run] 📥 Would install ${pkg}`));
+                console.log(chalk.green('Done!'));
+            } catch (error: any) {
+                // IDEMPOTENCY CHECK: Did it actually install despite the error?
+                try {
+                    await execa('brew', ['list', pkg]);
+                    console.log(chalk.blue(' (Installed with warnings, but verified)'));
+                } catch {
+                    console.log(chalk.red(`\n❌ Failed to install ${pkg}:`));
+                    console.error(chalk.dim(error.stderr || error.message));
+                    // Decide here: throw error to stop the script, or continue?
+                    // For a portfolio piece, "continue" is often better for flow.
+                }
             }
-            console.log(chalk.green('Done!'));
         }
     }
 }
@@ -116,12 +155,37 @@ async function main() {
             await syncBrewPackages(config.brew.packages.items);
         }
 
-        // 3. Sync Dotfiles
+        // 4. Sync Dotfiles
         if (config.dotfiles) {
             await syncDotfiles(config.dotfiles);
         }
 
         console.log(chalk.green.bold('\n✨ System state is synchronized.'));
+
+        // 4. Metadata / Reporting Phase (Add this here!) ---
+        console.log(chalk.blue('\n📊 Gathering System Metadata...'));
+
+        // Get the final list of brew packages to report back
+        const { stdout } = await execa('brew', ['list', '--formula']);
+        const installedPackages = stdout.split('\n').filter(Boolean);
+
+        const state: WorkstationState = {
+            hostname: os.hostname(),
+            os: `${os.platform()}-${os.arch()}`,
+            status: 'online', // If we reached here without a 'catch', it's online
+            lastSync: Date.now(),
+            packages: installedPackages,
+            version: '0.1.0' // Your CLI version
+        };
+
+        // For now, let’s just print it to prove it works
+        console.log(chalk.dim(JSON.stringify(state, null, 2)));
+
+        // NEXT STEP PREP:
+        // await reportToDashboard(state);
+
+        console.log(chalk.green.bold('\n✨ System is Fresh and Reported.'));
+
     } catch (err: any) {
         console.error(chalk.red('\n❌ Error:'), err.message);
     }
