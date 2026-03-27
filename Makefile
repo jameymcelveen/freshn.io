@@ -1,7 +1,7 @@
 # Extract version from package.json for use in tagging
 VERSION := $(shell node -p "require('./package.json').version")
 
-.PHONY: install dev-cli dev-web build fresh clean tag bump release push verify help
+.PHONY: install dev-cli dev-web build fresh clean tag bump release push verify help check
 
 help:
 	@echo "🌿 Freshn.io - Idempotent Workstation Manager."
@@ -67,3 +67,6 @@ push:
 	git add .
 	git commit -m "feat: workstation update $$(date)"
 	git push origin develop
+
+check:
+	@node scripts/check.js
