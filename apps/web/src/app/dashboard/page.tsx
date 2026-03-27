@@ -2,6 +2,8 @@ import {db} from '@/db';
 import {workstations} from '@/db/schema';
 import {desc} from 'drizzle-orm';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Dashboard() {
   // Fetch the fleet, newest syncs first
   const fleet = await db.select().from(workstations).orderBy(desc(workstations.lastSeen));
