@@ -1,6 +1,5 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
-import path from 'path';
 
 const run = (cmd) => execSync(cmd, { stdio: 'inherit' });
 const get = (cmd) => execSync(cmd).toString().trim();
