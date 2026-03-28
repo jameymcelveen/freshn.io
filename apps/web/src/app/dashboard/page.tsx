@@ -8,6 +8,19 @@ export default async function Dashboard() {
   // Fetch the fleet, newest syncs first
   const fleet = await db.select().from(workstations).orderBy(desc(workstations.lastSeen));
 
+  // Logic to count package frequency
+  const packageCounts: Record<string, number> = {};
+  fleet.forEach(node => {
+    node.packages?.forEach(pkg => {
+      packageCounts[pkg] = (packageCounts[pkg] || 0) + 1;
+    });
+  });
+
+// Sort to find the top 5
+  const topPackages = Object.entries(packageCounts)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+
   return (
     <main className="min-h-screen bg-[#0d1117] text-[#c9d1d9] p-8 font-sans">
       <div className="max-w-5xl mx-auto">
@@ -54,6 +67,22 @@ export default async function Dashboard() {
             </tbody>
           </table>
         </div>
+        <aside className="lg:col-span-1 space-y-6">
+          <div className="bg-[#161b22] border border-gray-800 p-6 rounded-xl">
+            <h3 className="text-gray-400 text-sm font-semibold mb-4 uppercase tracking-wider">
+              Top Fleet Packages
+            </h3>
+            <div className="space-y-3">
+              {topPackages.map(([name, count]) => (
+                <div key={name} className="flex justify-between items-center">
+                  <code className="text-cyan-400 text-xs">{name}</code>
+                  <span className="text-xs text-gray-500">{count} nodes</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Bonus: Add a "Quick Actions" or "Help" box below it later */}
+        </aside>
       </div>
     </main>
   );

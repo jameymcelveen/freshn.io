@@ -1,20 +1,23 @@
-import { NextResponse } from 'next/server';
-import { WorkstationState } from '@freshn/types';
+import {NextResponse} from 'next/server';
+import {WorkstationState} from '@freshn/types';
 
 export async function POST(request: Request) {
-    try {
-        const data: WorkstationState = await request.json();
+  try {
 
-        // 💡 This is where you'll eventually add Firebase:
-        // await db.collection('workstations').doc(data.hostname).set(data);
+    const apiKey = request.headers.get('x-freshn-key');
 
-        console.log(`🌿 Received heartbeat from ${data.hostname} (${data.os})`);
-
-        return NextResponse.json({
-            success: true,
-            message: `System ${data.hostname} synchronized.`
-        });
-    } catch (error) {
-        return NextResponse.json({ success: false, error: 'Invalid payload' }, { status: 400 });
+    if (apiKey !== process.env.FRESHN_API_KEY) {
+      return NextResponse.json({error: 'Unauthorized'}, {status: 401});
     }
+    const data: WorkstationState = await request.json();
+
+    console.log(`🌿 Received heartbeat from ${data.hostname} (${data.os})`);
+
+    return NextResponse.json({
+      success: true,
+      message: `System ${data.hostname} synchronized.`
+    });
+  } catch (error) {
+    return NextResponse.json({success: false, error: 'Invalid payload'}, {status: 400});
+  }
 }
